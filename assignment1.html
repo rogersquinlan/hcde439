@@ -3,7 +3,7 @@
  <head>
  <meta charset="utf-8">
  <meta name="viewport" content="width=device-width, maximum-scale=1.0" />
- <title>Quinlan Rogers HCDE 439 Physical Computing Page!</title>
+ <title>Example Student's HCDE 439 Physical Computing Page!</title>
  <link href="style.css" media="screen" rel="stylesheet" type="text/css" />
  </head>
  <body>
@@ -21,6 +21,30 @@ Hello, here is my blink project. It took me a bit of time as I am slowly learnin
  <h5> Here is a photo of my circuit.<h5>
  &emsp;
  <h5> Here is my arduino code.<h5>
- &emsp;
+ <xmp>
+ void setup() {
+ // initialize digital pin 13 as an output.
+ pinMode(13, OUTPUT);
+ // initialize digital pin 12 as an output.
+ pinMode(12, OUTPUT);
+ // initialize digital pin 9 as an output.
+ pinMode(9, OUTPUT);
+}
+// the loop function runs over and over again forever
+void loop() {
+ digitalWrite(13, HIGH); // turn 13 LED on (HIGH is the voltage level)
+ delay(1000); // wait for a second
+ digitalWrite(13, LOW); // turn 13 LED off by making the voltage LOW
+ delay(1000); // wait for a second
+ digitalWrite(12, HIGH); // turn 12 LED on (HIGH is the voltage level)
+ delay(1000); // wait for a second
+ digitalWrite(12, LOW); // turn 12 LED off by making the voltage LOW
+ delay(1000); // wait for a second
+ digitalWrite(9, HIGH); // turn 9 LED on (HIGH is the voltage level)
+ delay(1000); // wait for a second
+ digitalWrite(9, LOW); // turn 9 LED off by making the voltage LOW
+ delay(1000); // wait for a second
+}
+</xmp>
  <h5> Here is a gif of my working circuit.
  &emsp;
