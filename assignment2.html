@@ -63,7 +63,7 @@ void fadeLED(){
   for(int i=0; i<=255; i++) {
     analogWrite(ledRed, i);
     for(int j = 0; j < 300; j++){
-      // if button is released
+      //button release
       if (digitalRead(button) == LOW) {
       return;
       }
@@ -72,7 +72,7 @@ void fadeLED(){
   for(int i=255; i>=0; i--) {
     analogWrite(ledRed, i);
     for(int j = 0; j < 300; j++){
-      // if button is released
+      //button release
       if (digitalRead(button) == LOW) {
       return;
       }
@@ -83,7 +83,7 @@ void fadeLED(){
   for(int i=0; i<=255; i++) {
     analogWrite(ledGreen, i);
     for(int j = 0; j < 300; j++){
-      // if button is released
+      //button release
       if (digitalRead(button) == LOW) {
       return;
       }
