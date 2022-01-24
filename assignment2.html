@@ -16,12 +16,80 @@ Hello, here is my fade project. It consisits of two LED's and one button with th
  </div>
  &emsp;
 <h5>Here is an image of my drawn out schematic. I had a bit of trouble with this as I went right to building my circuit so I tried my best to work backwards.<h5>
- <img src="Images/Note Jan 24, 2022.jpg" width=400></a>
+ <img src="Images/FadeSchematic.jpeg" width=400></a>
  <h5> Here is a photo of my circuit.<h5>
  <img src="Images/IMG_0836.jpeg" width=400></a>
 
  <h5> Here is my arduino code.<h5>
  <xmp>
+  
+//Initialize Green and Red LED
+int ledRed = 9;
+int ledGreen = 11;
+int button = 7;
+const int fade = 10;
+
+void setup() {
+  //red and green pin and button setup
+  pinMode(ledRed, OUTPUT);
+  pinMode(ledGreen, OUTPUT);
+  pinMode(button, INPUT);
+  digitalWrite(ledRed, LOW);
+  digitalWrite(ledGreen, HIGH);
+
+}
+
+void loop() {
+    if(digitalRead(button) == HIGH){
+      //call my fade method
+      fadeLED();
+  }else {
+    digitalWrite(ledRed, LOW);
+    digitalWrite(ledGreen, HIGH);
+   }
+} 
+
+//fade method
+void fadeLED(){
+  for(int i=255; i>=0; i--) {
+    analogWrite(ledGreen, i);
+    for(int j = 0; j < 300; j++){
+      if (digitalRead(button) == LOW) {
+      return;
+      }
+    }
+  }
+ 
+  for(int i=0; i<=255; i++) {
+    analogWrite(ledRed, i);
+    for(int j = 0; j < 300; j++){
+      // if button is released
+      if (digitalRead(button) == LOW) {
+      return;
+      }
+    }
+  }
+  for(int i=255; i>=0; i--) {
+    analogWrite(ledRed, i);
+    for(int j = 0; j < 300; j++){
+      // if button is released
+      if (digitalRead(button) == LOW) {
+      return;
+      }
+    }
+  }
+
+  //ledGreen
+  for(int i=0; i<=255; i++) {
+    analogWrite(ledGreen, i);
+    for(int j = 0; j < 300; j++){
+      // if button is released
+      if (digitalRead(button) == LOW) {
+      return;
+      }
+    }
+  }
+}
  
 </xmp>
  <h5> Here is a gif of my working circuit.
