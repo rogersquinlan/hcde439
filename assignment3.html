@@ -1,1 +1,97 @@
+<!DOCTYPE html>
+<html>
+ <head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, maximum-scale=1.0" />
+ <title>Quinlans HCDE 439 Physical Computing Page!</title>
+ <link href="style.css" media="screen" rel="stylesheet" type="text/css" />
+ </head>
+ <body>
+ <div>
+ <h1>Assignment 2 - FADE</h1>
+ <p>
+ Here is all the documentation for assignment 2!
+ </p>
+Hello, here is my fade project. It consisits of two LED's and one button with three 220 ohm resistors. 
+ </div>
+ &emsp;
+<h5>Here is an image of my drawn out schematic. I drew the button as a switch.<h5>
+ <img src="Images/Fade Schematic.jpg" width=400></a>
+ <h5> Here is a photo of my circuit.<h5>
+ <img src="Images/FadeImage.jpeg" width=400></a>
+
+ <h5> Here is my arduino code.<h5>
+ <xmp>
+  
+//Initialize Green and Red LED
+int ledRed = 9;
+int ledGreen = 11;
+int button = 7;
+const int fade = 10;
+
+void setup() {
+  //red and green pin and button setup
+  pinMode(ledRed, OUTPUT);
+  pinMode(ledGreen, OUTPUT);
+  pinMode(button, INPUT);
+  digitalWrite(ledRed, LOW);
+  digitalWrite(ledGreen, HIGH);
+
+}
+
+void loop() {
+    if(digitalRead(button) == HIGH){
+      //call my fade method
+      fadeLED();
+  }else {
+    digitalWrite(ledRed, LOW);
+    digitalWrite(ledGreen, HIGH);
+   }
+} 
+
+//fade method
+void fadeLED(){
+  for(int i=255; i>=0; i--) {
+    analogWrite(ledGreen, i);
+    for(int j = 0; j < 300; j++){
+      if (digitalRead(button) == LOW) {
+      return;
+      }
+    }
+  }
+ 
+  for(int i=0; i<=255; i++) {
+    analogWrite(ledRed, i);
+    for(int j = 0; j < 300; j++){
+      //button release
+      if (digitalRead(button) == LOW) {
+      return;
+      }
+    }
+  }
+  for(int i=255; i>=0; i--) {
+    analogWrite(ledRed, i);
+    for(int j = 0; j < 300; j++){
+      //button release
+      if (digitalRead(button) == LOW) {
+      return;
+      }
+    }
+  }
+
+  //ledGreen
+  for(int i=0; i<=255; i++) {
+    analogWrite(ledGreen, i);
+    for(int j = 0; j < 300; j++){
+      //button release
+      if (digitalRead(button) == LOW) {
+      return;
+      }
+    }
+  }
+}
+ </xmp>
+ <h5> Here is a video of my working circuit.<h5>
+ <img src="Images/FadeGif.gif" width=400></a>
+
 
