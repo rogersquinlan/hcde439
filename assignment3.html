@@ -23,72 +23,45 @@ Hello, here is my input output project.
  <h5> Here is my arduino code.<h5>
  <xmp>
   
-//Initialize Green and Red LED
-int ledRed = 9;
-int ledGreen = 11;
-int button = 7;
-const int fade = 10;
+// Some code was taken from example of AnalogInOutSerial
+// These constants won't change. They're used to give names to the pins used:
+const int analogInPin = A0;  // Analog input pin that photoresistor is attached to
+const int redLED = 9; // Analog output for LED pin
+
+int sensorValue = 0;        // value read from from photores
+int outputValue = 0;        // value output to the PWM (analog out)
 
 void setup() {
-  //red and green pin and button setup
-  pinMode(ledRed, OUTPUT);
-  pinMode(ledGreen, OUTPUT);
-  pinMode(button, INPUT);
-  digitalWrite(ledRed, LOW);
-  digitalWrite(ledGreen, HIGH);
-
+  // initialize serial at 9600 bps
+  Serial.begin(9600);
 }
 
 void loop() {
-    if(digitalRead(button) == HIGH){
-      //call my fade method
-      fadeLED();
-  }else {
-    digitalWrite(ledRed, LOW);
-    digitalWrite(ledGreen, HIGH);
-   }
-} 
+  // read the analog for the sensor
+  sensorValue = analogRead(analogInPin);
+  //print current light val to the serial monitor
+  Serial.println(sensorValue);
 
-//fade method
-void fadeLED(){
-  for(int i=255; i>=0; i--) {
-    analogWrite(ledGreen, i);
-    for(int j = 0; j < 300; j++){
-      if (digitalRead(button) == LOW) {
-      return;
-      }
-    }
-  }
- 
-  for(int i=0; i<=255; i++) {
-    analogWrite(ledRed, i);
-    for(int j = 0; j < 300; j++){
-      //button release
-      if (digitalRead(button) == LOW) {
-      return;
-      }
-    }
-  }
-  for(int i=255; i>=0; i--) {
-    analogWrite(ledRed, i);
-    for(int j = 0; j < 300; j++){
-      //button release
-      if (digitalRead(button) == LOW) {
-      return;
-      }
-    }
+  //if photoresistor is dark(me putting finger over it)
+  if(sensorValue == 0) {
+    Serial.println("Darkness will turn light off");
+    digitalWrite(9,LOW);
+  //if light hits the photo resistor
+  } else {
+    Serial.println("Light is hitting photoresistor!");
+    //maps to range when light hits photoresistor
+     outputValue = map(sensorValue, 500, 900, 0, 255);
+     analogWrite(redLED, outputValue);
   }
 
-  //ledGreen
-  for(int i=0; i<=255; i++) {
-    analogWrite(ledGreen, i);
-    for(int j = 0; j < 300; j++){
-      //button release
-      if (digitalRead(button) == LOW) {
-      return;
-      }
-    }
-  }
+  // print more results to serial monitor
+  //Serial.println("sensor = ");
+  //Serial.print(sensorValue);
+ // Serial.println("\t output = ");
+  //Serial.print(outputValue);
+
+  // wait 6 milliseconds before the next loop
+  delay(6);
 }
  </xmp>
  <h5> Here is a video of my working circuit.<h5>
