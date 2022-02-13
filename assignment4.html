@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+ <head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, maximum-scale=1.0" />
+ <title>Quinlans HCDE 439 Physical Computing Page!</title>
+ <link href="style.css" media="screen" rel="stylesheet" type="text/css" />
+ </head>
+ <body>
+ <div>
+ <h1>Assignment 3 - Input Output</h1>
+ <p>
+ Here is all the documentation for assignment 3!
+ </p>
+Hello, here is my input output project.  
+ </div>
+ &emsp;
+<h5>Here is an image of my drawn out schematic.<h5>
+ <img src="Images/InputOutputSchematicNew.jpeg" width=400></a>
+ <h5> Here is a photo of my circuit.<h5>
+ <img src="Images/InputOutputNew.jpeg" width=400></a>
+
+ <h5> Here is my arduino code.<h5>
+ <xmp>
+  
+// Some code was taken from example of AnalogInOutSerial
+// These constants won't change. They're used to give names to the pins used:
+const int analogInPin = A0;  // Analog input pin that photoresistor is attached to
+const int redLED = 9; // Analog output for LED pin
+
+int sensorValue = 0;        // value read from from photores
+int outputValue = 0;        // value output to the PWM (analog out)
+
+void setup() {
+  // initialize serial at 9600 bps
+  Serial.begin(9600);
+}
+
+void loop() {
+  // read the analog for the sensor
+  sensorValue = analogRead(analogInPin);
+  //print current light val to the serial monitor
+  Serial.println(sensorValue);
+
+  //if photoresistor is dark(me putting finger over it)
+  if(sensorValue == 0) {
+    Serial.println("Darkness will turn light off");
+    digitalWrite(9,LOW);
+  //if light hits the photo resistor
+  } else {
+    Serial.println("Light is hitting photoresistor!");
+    //maps to range when light hits photoresistor
+     outputValue = map(sensorValue, 500, 900, 0, 255);
+     analogWrite(redLED, outputValue);
+  }
+
+  // print more results to serial monitor
+  //Serial.println("sensor = ");
+  //Serial.print(sensorValue);
+ // Serial.println("\t output = ");
+  //Serial.print(outputValue);
+
+  // wait 6 milliseconds before the next loop
+  delay(6);
+}
+ </xmp>
+ <h5> Here is a video of my working circuit.<h5>
+ <img src="Images/InputOutputGif.gif" width=400></a>
