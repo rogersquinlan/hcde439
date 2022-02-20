@@ -1,1 +1,76 @@
+<!DOCTYPE html>
+<html>
+ <head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, maximum-scale=1.0" />
+ <title>Quinlans HCDE 439 Physical Computing Page!</title>
+ <link href="style.css" media="screen" rel="stylesheet" type="text/css" />
+ </head>
+ <body>
+ <div>
+ <h1>Assignment 4 - Libraries</h1>
+ <p>
+ Here is all the documentation for assignment 4!
+ </p>
+Hello, here is my libraries project. Using IRremote library to change the color of an RGB LED.
+ </div>
+ &emsp;
+<h5>Here is an image of my drawn out schematic.<h5>
+ <img src="Images/LibrariesSchematic.jpeg" width=300></a>
+ <h5> Here is a photo of my circuit.<h5>
+ <img src="Images/LibrariesImage.jpeg" width=300></a>
 
+ <h5> Here is my arduino code.<h5>
+ <xmp>
+ #include <IRremote.h>
+int RECV_PIN =7;
+int bluePin = 11;
+int greenPin = 10;
+int redPin = 9;
+IRrecv irrecv(RECV_PIN);
+decode_results results;
+void setup(){
+	Serial.begin(9600);
+	irrecv.enableIRIn();
+	pinMode(redPin, OUTPUT);
+	pinMode(greenPin, OUTPUT);
+	pinMode(bluePin, OUTPUT);
+}
+void loop(){
+	if (irrecv.decode(&results)){
+		int value = results.value;
+		Serial.println(value);
+		switch(value){
+			case 12495: //Keypad button "1"
+			//set color red
+			analogWrite(redPin, 0xFF);
+			analogWrite(greenPin,0x08);
+			analogWrite(bluePin, 0xFB);
+		}
+		switch(value){
+			case -7177: //Keypad button "2"
+			//set color blue
+			analogWrite(redPin, 0x00);
+			analogWrite(greenPin,0x00);
+			analogWrite(bluePin, 0xFF);
+		}
+		switch(value){
+			case 539: //Keypad button "3"
+			//set color pink
+			analogWrite(redPin, 0x1F);
+			analogWrite(greenPin,0x00);
+			analogWrite(bluePin, 0x8F);
+		}
+		switch(value){
+			case 25979: //Keypad button "4"
+			//set color green green
+			analogWrite(redPin, 0x00);
+			analogWrite(greenPin,0xFF);
+			analogWrite(bluePin, 0x00);
+		}
+		irrecv.resume();
+	}
+}
+ </xmp>
+ <h5> Here is a video of my working circuit.<h5>
+ <img src="LibrariesGif.gif" width=300></a>
