@@ -22,54 +22,53 @@ Hello, here is my higher voltage and transistors project.
 
  <h5> Here is my arduino code.<h5>
  <xmp>
- #include <IRremote.h>
-int RECV_PIN =7;
-int bluePin = 11;
-int greenPin = 10;
-int redPin = 9;
-IRrecv irrecv(RECV_PIN);
-decode_results results;
-void setup(){
-	Serial.begin(9600);
-	irrecv.enableIRIn();
-	pinMode(redPin, OUTPUT);
-	pinMode(greenPin, OUTPUT);
-	pinMode(bluePin, OUTPUT);
-}
-void loop(){
-	if (irrecv.decode(&results)){
-		int value = results.value;
-		Serial.println(value);
-		switch(value){
-			case 12495: //Keypad button "1"
-			//set color red
-			analogWrite(redPin, 0xFF);
-			analogWrite(greenPin,0x08);
-			analogWrite(bluePin, 0xFB);
-		}
-		switch(value){
-			case -7177: //Keypad button "2"
-			//set color blue
-			analogWrite(redPin, 0x00);
-			analogWrite(greenPin,0x00);
-			analogWrite(bluePin, 0xFF);
-		}
-		switch(value){
-			case 539: //Keypad button "3"
-			//set color pink
-			analogWrite(redPin, 0x1F);
-			analogWrite(greenPin,0x00);
-			analogWrite(bluePin, 0x8F);
-		}
-		switch(value){
-			case 25979: //Keypad button "4"
-			//set color green green
-			analogWrite(redPin, 0x00);
-			analogWrite(greenPin,0xFF);
-			analogWrite(bluePin, 0x00);
-		}
-		irrecv.resume();
-	}
+ #include <IRremote.h>      //must copy IRremote library to arduino libraries  
+#include <Servo.h>  
+#define plus 0xA3C8EDDB   //clockwise rotation button  
+#define minus 0xF076C13B  //counter clockwise rotation button  
+  
+int RECV_PIN = 7;       //IR receiver pin  
+Servo servo;  
+int val;                //rotation angle  
+bool cwRotation, ccwRotation;  //the states of rotation  
+  
+IRrecv irrecv(RECV_PIN);  
+  
+decode_results results;  
+  
+void setup()  
+{  
+  Serial.begin(9600);  
+  irrecv.enableIRIn(); // Start the receiver  
+  servo.attach(10);     //servo pin  
+}  
+  
+void loop()   
+{  
+  if (irrecv.decode(&results)) {  
+    Serial.println(results.value, HEX);  
+    irrecv.resume(); // Receive the next value  
+  
+    if (results.value == plus)  
+    {  
+      cwRotation = !cwRotation;      //toggle the rotation value  
+      ccwRotation = false;         //no rotation in this direction  
+    }  
+  
+    if (results.value == minus)  
+    {  
+      ccwRotation = !ccwRotation;   //toggle the rotation value  
+      cwRotation = false;            //no rotation in this direction  
+    }  
+  }  
+  if (cwRotation && (val != 175))  {  
+    val++;                         //for colockwise button  
+  }  
+  if (ccwRotation && (val != 0))  {  
+    val--;                         //for counter colockwise button  
+  }  
+  servo.write(val);  
+  delay(20);          //General speed  
 }
  </xmp>
  <h5> Here is a video of my working circuit.<h5>
