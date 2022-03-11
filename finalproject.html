@@ -8,14 +8,14 @@
  </head>
  <body>
  <div>
- <h1>Assignment 6 - Talking to the web! </h1>
+ <h1>Final Project!</h1>
  <p>
- Here is all the documentation for assignment 6!
+ Here is all the documentation for my final project.
  </p>
-Hello, here is my talking to the web project.
+Hello, here is my final project on RFID to LED strip.
  </div>
  &emsp;
-<h5>Here is an image of my drawn out schematic.<h5>
+<h5>Here is an image of schematic.<h5>
  <img src=".Images/LibrariesSchematic.jpeg" width=300></a>
  <h5> Here is a photo of my circuit.<h5>
  <img src="Images/A6Image.png" width=300></a>
@@ -25,14 +25,71 @@ Hello, here is my talking to the web project.
 
    <h5> Here is my ardiono code.<h5>
  <xmp>
-  void setup() {
-  Serial.begin(9600);
+  #include <SPI.h>
+#include <MFRC522.h>
+ 
+#define SS_PIN 10
+#define RST_PIN 9
+
+
+int ledPin = 6;
+boolean LED_status = false;
+MFRC522 rfid(SS_PIN, RST_PIN); 
+ 
+MFRC522::MIFARE_Key key;
+ 
+// Init array that will store UID
+byte uid[4];
+
+void printHex(byte *buffer, byte bufferSize) {
+  for (byte i = 0; i < bufferSize; i++) {
+    Serial.print(buffer[i] < 0x10 ? " 0" : " ");
+    Serial.print(buffer[i], HEX);
+  }
 }
 
+void setup() {
+  analogWrite(ledPin, LOW);
+  Serial.begin(9600);
+  SPI.begin(); // Init SPI bus
+  rfid.PCD_Init(); // Init MFRC522
+  for (byte i = 0; i < 6; i++) {
+    key.keyByte[i] = 0xFF;
+  }
+} 
+ 
 void loop() {
-  int button = digitalRead(2);
-  Serial.println(button);
-  delay(50);
+if (rfid.PICC_IsNewCardPresent() && rfid.PICC_ReadCardSerial() && LED_status == false){
+ for (byte i = 0; i < 4; i++) {
+     uid[i] = rfid.uid.uidByte[i];
+ }
+ printHex(rfid.uid.uidByte, rfid.uid.size);
+ rfid.PICC_HaltA();
+ rfid.PCD_StopCrypto1();
+
+
+  if(uid[0] == 0x3C) {
+  Serial.println("blue tag");
+  Serial.println("turn led on");
+  analogWrite(ledPin, 255);
+  LED_status = true;
+  delay(1000);
+ }
+ else if(uid[0] == 0xF3) {
+  Serial.println("white tag");
+  Serial.println("blink");
+  analogWrite(ledPin, 50);
+  LED_status = true;
+  delay(1000);
+  }
+} 
+ else if(rfid.PICC_IsNewCardPresent() && rfid.PICC_ReadCardSerial() && LED_status == true) {
+  Serial.println("turn led off");
+  analogWrite(ledPin, 0);
+  LED_status = false;
+  delay(1000);
+
+ }
 }
   </xmp>
    
